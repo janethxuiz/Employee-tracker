@@ -170,3 +170,72 @@ function addRole() {
         })
 });
 };
+
+function addEmployee() {
+    inquirer.prompt([
+        {
+            name: "first_name",
+            type: "input",
+            message: "Please enter the first name of the employee you want to add to the database."
+        },
+        {
+            name: "last_name",
+            type: "input",
+            message: "Please enter the last name of the employee you want to add to the database."
+        },
+        {
+            name: "role_id",
+            type: "number",
+            message: "Please enter the role id associated with the employee you want to add to the database. Enter ONLY numbers."
+        },
+        {
+            name: "manager_id",
+            type: "number",
+            message: "Please enter the manager's id associated with the employee you want to add to the database. Enter ONLY numbers."
+        }
+
+    ]).then(function (response) {
+        db.query("INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)", [response.first_name, response.last_name, response.role_id, response.manager_id], function (err, data) {
+            if (err) throw err;
+            console.log('The new employee entered has been added successfully to the database.');
+
+            db.query(`SELECT * FROM employee`, (err, result) => {
+                if (err) {
+                    res.status(500).json({ error: err.message })
+                    startPrompt();
+                }
+                console.table(result);
+                startPrompt();
+            });
+        })
+});
+};
+
+function updateEmployeeRole() {
+    inquirer.prompt([
+        {
+            name: "first_name",
+            type: "input",
+            message: "Please enter the first name of the employee you want update in the database."
+        },
+        {
+            name: "role_id",
+            type: "number",
+            message: "Please enter the new role number id associated with the employee you want to update in the database. Enter ONLY numbers."
+        }
+    ]).then(function (response) {
+        db.query("UPDATE employee SET role_id = ? WHERE first_name = ?", [response.role_id, response.first_name], function (err, data) {
+            if (err) throw err;
+            console.log('The new role entered has been added successfully to the database.');
+
+            db.query(`SELECT * FROM employee`, (err, result) => {
+                if (err) {
+                    res.status(500).json({ error: err.message })
+                    startPrompt();
+                }
+                console.table(result);
+                startPrompt();
+            });
+        })
+});
+};
