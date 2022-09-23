@@ -239,3 +239,106 @@ function updateEmployeeRole() {
         })
 });
 };
+
+function updateEmployeeManager() {
+    inquirer.prompt([
+        {
+            name: "first_name",
+            type: "input",
+            message: "Please enter the first name of the employee you want update in the database."
+        },
+        {
+            name: "manager_id",
+            type: "number",
+            message: "Please enter the new manager's id number associated with the employee you want to update in the database. Enter ONLY numbers."
+        }
+    ]).then(function (response) {
+        db.query("UPDATE employee SET manager_id = ? WHERE first_name = ?", [response.manager_id, response.first_name], function (err, data) {
+            if (err) throw err;
+            console.log("The new manager's id entered has been added successfully to the database.");
+
+            db.query(`SELECT * FROM employee`, (err, result) => {
+                if (err) {
+                    res.status(500).json({ error: err.message })
+                    startPrompt();
+                }
+                console.table(result);
+                startPrompt();
+            });
+        })
+});
+};
+
+function deleteDepartment() {
+    inquirer.prompt([
+        {
+            name: "department_id",
+            type: "number",
+            message: "Please enter the id of the department you want to delete from the database. Enter ONLY numbers."
+        }
+    ]).then(function (response) {
+        db.query("DELETE FROM department WHERE id = ?", [response.department_id], function (err, data) {
+            if (err) throw err;
+            console.log("The department entered has been deleted successfully from the database.");
+
+            db.query(`SELECT * FROM department`, (err, result) => {
+                if (err) {
+                    res.status(500).json({ error: err.message })
+                    startPrompt();
+                }
+                console.table(result);
+                startPrompt();
+            });
+        })
+});
+};
+
+function deleteRole() {
+    inquirer.prompt([
+        {
+            name: "role_id",
+            type: "number",
+            message: "Please enter the id of the role you want to delete from the database. Enter ONLY numbers."
+        }
+    ]).then(function (response) {
+        db.query("DELETE FROM role WHERE id = ?", [response.role_id], function (err, data) {
+            if (err) throw err;
+            console.log("The role entered has been deleted successfully from the database.");
+
+            db.query(`SELECT * FROM role`, (err, result) => {
+                if (err) {
+                    res.status(500).json({ error: err.message })
+                    startPrompt();
+                }
+                console.table(result);
+                startPrompt();
+            });
+        })
+});
+};
+
+function deleteEmployee() {
+    inquirer.prompt([
+        {
+            name: "employee_id",
+            type: "number",
+            message: "Please enter the id of the employee you want to delete from the database. Enter ONLY numbers."
+        }
+    ]).then(function (response) {
+        db.query("DELETE FROM employee WHERE id = ?", [response.employee_id], function (err, data) {
+            if (err) throw err;
+            console.log("The employee entered has been deleted successfully from the database.");
+
+            db.query(`SELECT * FROM employee`, (err, result) => {
+                if (err) {
+                    res.status(500).json({ error: err.message })
+                    startPrompt();
+                }
+                console.table(result);
+                startPrompt();
+            });
+        })
+});
+};
+
+startPrompt();
