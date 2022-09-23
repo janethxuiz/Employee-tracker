@@ -88,3 +88,85 @@ function viewAllRoles() {
         startPrompt();
     });
 };
+
+function viewAllEmployees() {
+    const sql = `SELECT employee.id,
+                employee.first_name,
+                employee.last_name,
+                role.title AS job_title,
+                department.department_name,
+                role.salary,
+                CONCAT(manager.first_name, ' ' ,manager.last_name) AS manager
+                FROM employee
+                LEFT JOIN role ON employee.role_id = role.id
+                LEFT JOIN department ON role.department_id = department.id
+                LEFT JOIN employee AS manager ON employee.manager_id = manager.id
+                ORDER By employee.id`;
+    db.query(sql, (err, result) => {
+        if (err) throw err;
+        console.table(result);
+        startPrompt();
+    });
+};
+
+function addDepartment() {
+    inquirer.prompt([
+        {
+            name: "department_name",
+            type: "input",
+            message: "Please enter the name of the department you want to add to the database."
+        }
+    ]).then((answer) => {
+
+    const sql = `INSERT INTO department (department_name)
+                VALUES (?)`;
+    const params = [answer.department_name];
+    db.query(sql, params, (err, result) => {
+    if (err) throw err;
+    console.log('The new department entered has been added successfully to the database.');
+
+        db.query(`SELECT * FROM department`, (err, result) => {
+            if (err) {
+                res.status(500).json({ error: err.message })
+                return;
+            }
+            console.table(result);
+            startPrompt();
+        });
+    });
+});
+};
+
+function addRole() {
+    inquirer.prompt([
+        {
+            name: "title",
+            type: "input",
+            message: "Please enter the title of role you want to add to the database."
+        },
+        {
+            name: "salary",
+            type: "input",
+            message: "Please enter the salary associated with the role you want to add to the database. (no dots, space or commas)"
+        },
+        {
+            name: "department_id",
+            type: "number",
+            message: "Please enter the department's id associated with the role you want to add to the database."
+        }
+    ]).then(function (response) {
+        db.query("INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)", [response.title, response.salary, response.department_id], function (err, data) {
+            if (err) throw err;
+            console.log('The new role entered has been added successfully to the database.');
+
+            db.query(`SELECT * FROM role`, (err, result) => {
+                if (err) {
+                    res.status(500).json({ error: err.message })
+                    startPrompt();
+                }
+                console.table(result);
+                startPrompt();
+            });
+        })
+});
+};
