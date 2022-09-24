@@ -17,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/janethxuiz/Employee-tracker/issues"
   },
-  "homepage": "https://github.com/janethxuiz/Employee-tracker#readme"
+  "homepage": "https://github.com/janethxuiz/Employee-tracker#readme",
+  "dependencies": {
+    "inquirer": "^8.2.4"
+  }
 }
