@@ -1,10 +1,9 @@
 {
   "name": "employee-tracker",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "In this app we will enter the command line using MySQL. we are able to enter a list of commands that will help you choose an employee add their role and generate their salary.",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
   },
   "repository": {
@@ -19,6 +18,8 @@
   },
   "homepage": "https://github.com/janethxuiz/Employee-tracker#readme",
   "dependencies": {
-    "inquirer": "^8.2.4"
+    "console.table": "^0.10.0",
+    "inquirer": "^8.2.4",
+    "mysql2": "^2.3.3"
   }
 }
